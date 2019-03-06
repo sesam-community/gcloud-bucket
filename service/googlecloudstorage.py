@@ -1,7 +1,8 @@
 from google.cloud import storage
-import logging
+import logger
 from flask import abort
 
+logger = logger.Logger("gcloud-bucket")
 
 # class for reading files from a Google cloud storage
 class GoogleCloudStorage:
@@ -16,35 +17,13 @@ class GoogleCloudStorage:
         self.bucket = bucketname
         pass
 
-    # method for retrieving a list of the files in the Google cloud storage bucket
-    def getlistofxmlfiles(self, path):
-        def generate():
-
-            # get all the blobs (files) in the bucket
-            blobs = bucket.list_blobs()
-            # loop through the blogs and only return those in the root folder of the bucket
-            for blob in blobs:
-                if blob.name.startswith(path) and not blob.name.endswith("/"):  # subfolder object
-                    yield blob.name
-
-        try:
-            # initiate Google cloud storage client
-            storage_client = storage.Client()
-            # get the bucket from the Google cloud storage
-            bucket = storage_client.get_bucket(self.bucket)
-
-            # return all the files in the bucket
-            return generate()
-        except Exception as e:
-            logging.error(str(e))
-            abort(type(e).__name__, str(e))
-
     # method for downloading the content of a file in the Google cloud storage bucket
     def download(self, filename):
         # initiate Google cloud storage client
         storage_client = storage.Client()
         # get the bucket from the Google cloud storage
         bucket = storage_client.get_bucket(self.bucket)
+        # logger.info("Trying to fetch the data from: %s", filename)
 
         try:
             # set chunk size

@@ -1,5 +1,5 @@
 ===============================
-xml-translator-service-template
+gcloud-bucket
 ===============================
 
-A python micro service template that reads xml files from a source, concatenates them and translates them into json objects.
+A python micro service template that reads files from a bucket and returns a byte stream
